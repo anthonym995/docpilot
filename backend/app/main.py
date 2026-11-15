@@ -1,7 +1,8 @@
 import uvicorn
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.auth.dependencies import AuthenticatedUser, get_current_user
 from app.config import settings
 
 app = FastAPI(title="Document Copilot")
@@ -18,6 +19,15 @@ app.add_middleware(
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+
+@app.get("/auth/me")
+async def get_me(user: AuthenticatedUser = Depends(get_current_user)):  # noqa: B008
+    return {
+        "status": "authenticated",
+        "user_id": str(user.user_id),
+        "email": user.email,
+    }
 
 
 if __name__ == "__main__":
