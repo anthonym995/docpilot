@@ -8,11 +8,11 @@ from app.database.user import User
 
 __all__ = [
     "Base",
-    "TimestampMixin",
-    "User",
-    "ChatThread",
     "ChatMessage",
-    "SourceDocument",
+    "ChatThread",
     "DocumentChunk",
     "MessageCitation",
+    "SourceDocument",
+    "TimestampMixin",
+    "User",
 ]

@@ -26,4 +26,3 @@ class User(Base, TimestampMixin):
     messages: Mapped[list["ChatMessage"]] = relationship(
         "ChatMessage", back_populates="user", cascade="all, delete-orphan"
     )
-

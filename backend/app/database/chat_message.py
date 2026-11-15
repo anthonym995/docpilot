@@ -34,7 +34,9 @@ class ChatMessage(Base):
         nullable=False,
         index=True,
     )
-    role: Mapped[str] = mapped_column(String(50), nullable=False)  # user, assistant, system
+    role: Mapped[str] = mapped_column(
+        String(50), nullable=False
+    )  # user, assistant, system
     content: Mapped[Text] = mapped_column(Text, nullable=False)
     # AI SDK UI message parts and extra metadata
     parts: Mapped[list[dict[str, Any]] | None] = mapped_column(JSONB, nullable=True)
@@ -48,4 +50,3 @@ class ChatMessage(Base):
     citations: Mapped[list["MessageCitation"]] = relationship(
         "MessageCitation", back_populates="message", cascade="all, delete-orphan"
     )
-

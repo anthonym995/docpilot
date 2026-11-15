@@ -35,4 +35,3 @@ class ChatThread(Base, TimestampMixin):
         cascade="all, delete-orphan",
         order_by="ChatMessage.created_at",
     )
-

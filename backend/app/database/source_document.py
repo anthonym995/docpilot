@@ -24,11 +24,15 @@ class SourceDocument(Base, TimestampMixin):
     ticker: Mapped[str] = mapped_column(String(20), nullable=False, index=True)
     company: Mapped[str] = mapped_column(String(255), nullable=False)
     cik: Mapped[str | None] = mapped_column(String(20), nullable=True)
-    form: Mapped[str] = mapped_column(String(20), nullable=False, index=True)  # e.g. 10-K
+    form: Mapped[str] = mapped_column(
+        String(20), nullable=False, index=True
+    )  # e.g. 10-K
     filing_date: Mapped[datetime | None] = mapped_column(Date, nullable=True)
     report_date: Mapped[datetime | None] = mapped_column(Date, nullable=True)
     fiscal_year: Mapped[int | None] = mapped_column(Integer, nullable=True, index=True)
-    accession_number: Mapped[str | None] = mapped_column(String(50), nullable=True, unique=True)
+    accession_number: Mapped[str | None] = mapped_column(
+        String(50), nullable=True, unique=True
+    )
     source_url: Mapped[str | None] = mapped_column(Text, nullable=True)
     normalized_markdown: Mapped[str] = mapped_column(Text, nullable=False)
     metadata_: Mapped[dict[str, Any]] = mapped_column(
@@ -44,4 +48,3 @@ class SourceDocument(Base, TimestampMixin):
     citations: Mapped[list["MessageCitation"]] = relationship(
         "MessageCitation", back_populates="document"
     )
-

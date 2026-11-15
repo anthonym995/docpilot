@@ -51,7 +51,9 @@ class DocumentChunk(Base):
 
     __table_args__ = (
         Index("ix_document_chunks_document_chunk_idx", "document_id", "chunk_index"),
-        Index("ix_document_chunks_search_vector", "search_vector", postgresql_using="gin"),
+        Index(
+            "ix_document_chunks_search_vector", "search_vector", postgresql_using="gin"
+        ),
         Index("ix_document_chunks_metadata", "metadata", postgresql_using="gin"),
         Index(
             "ix_document_chunks_embedding_hnsw",
@@ -60,4 +62,3 @@ class DocumentChunk(Base):
             postgresql_ops={"embedding": "vector_cosine_ops"},
         ),
     )
-

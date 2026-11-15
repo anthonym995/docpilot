@@ -27,29 +27,29 @@ Do **not** build the entire frontend or entire backend in isolation. Follow this
 
 ## Phase 1: Backend Core & Database Schema
 
-- [ ] **Settings & App Entrypoint**
-  - [ ] Create `backend/app/config.py` using `pydantic-settings` as the single source of truth for `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `DATABASE_URL`, `OPENAI_API_KEY`, `OPENAI_EMBEDDING_MODEL`, `OPENAI_EMBEDDING_DIMENSIONS`, and `ALLOWED_ORIGINS` (fail fast on missing required vars; mirror env vars if needed by SDKs; no `os.getenv`/`load_dotenv` elsewhere)
-  - [ ] Create `backend/app/main.py` with FastAPI app, `structlog` logging configuration, CORS middleware from `settings.ALLOWED_ORIGINS`, and `GET /health`
+- [x] **Settings & App Entrypoint**
+  - [x] Create `backend/app/config.py` using `pydantic-settings` as the single source of truth for `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `DATABASE_URL`, `OPENAI_API_KEY`, `OPENAI_EMBEDDING_MODEL`, `OPENAI_EMBEDDING_DIMENSIONS`, and `ALLOWED_ORIGINS` (fail fast on missing required vars; mirror env vars if needed by SDKs; no `os.getenv`/`load_dotenv` elsewhere)
+  - [x] Create `backend/app/main.py` with FastAPI app, `structlog` logging configuration, CORS middleware from `settings.ALLOWED_ORIGINS`, and `GET /health`
 - [ ] **Database Models & Alembic Setup**
-  - [ ] Initialize Alembic in `backend/` (`uv run alembic init alembic`) and configure `backend/alembic/env.py` to import SQLAlchemy `Base.metadata` and read `settings.DATABASE_URL`
+  - [x] Initialize Alembic in `backend/` (`uv run alembic init alembic`) and configure `backend/alembic/env.py` to import SQLAlchemy `Base.metadata` and read `settings.DATABASE_URL`
   - [ ] Create `backend/app/database/supabase.py` exposing user-scoped (bearer token + anon key) and privileged admin (service-role) Supabase clients
-  - [ ] Create `backend/app/database/models.py` defining SQLAlchemy tables:
-    - [ ] `profiles` (keyed by Supabase `auth.users.id`, email, timestamps)
-    - [ ] `chat_threads` (id, `user_id`, title, timestamps)
-    - [ ] `chat_messages` (id, `thread_id`, `user_id`, role, content / AI SDK parts JSON, usage metadata, `created_at`)
-    - [ ] `message_citations` (id, `message_id`, `chunk_id`, `document_id`, label/index, excerpt, page, section, metadata)
-    - [ ] `source_documents` (id, ticker, company, cik, form, filing_date, report_date, fiscal_year, accession_number, source_url, normalized_markdown, metadata, timestamps)
-    - [ ] `document_chunks` (id, `document_id`, `chunk_index`, page, section, `chunk_text`, `embedding`, `search_vector`, `token_count`, metadata JSON)
+  - [x] Create modular models in `backend/app/database/` defining SQLAlchemy tables:
+    - [x] `users` (keyed by Supabase `auth.users.id`, email, timestamps)
+    - [x] `chat_threads` (id, `user_id`, title, timestamps)
+    - [x] `chat_messages` (id, `thread_id`, `user_id`, role, content / AI SDK parts JSON, usage metadata, `created_at`)
+    - [x] `message_citations` (id, `message_id`, `chunk_id`, `document_id`, label/index, excerpt, page, section, metadata)
+    - [x] `source_documents` (id, ticker, company, cik, form, filing_date, report_date, fiscal_year, accession_number, source_url, normalized_markdown, metadata, timestamps)
+    - [x] `document_chunks` (id, `document_id`, `chunk_index`, page, section, `chunk_text`, `embedding`, `search_vector`, `token_count`, metadata JSON)
 - [ ] **Initial Migration & Postgres/Supabase Features**
-  - [ ] Generate initial migration with `uv run alembic revision --autogenerate -m "initial schema"`
-  - [ ] Review and add explicit `op.execute()` operations for Postgres/Supabase specifics:
-    - [ ] `CREATE EXTENSION IF NOT EXISTS vector;`
-    - [ ] `vector(1536)` embedding column on `document_chunks`
-    - [ ] Generated `tsvector` column (`search_vector`) on `document_chunks.chunk_text`
-    - [ ] HNSW index on `document_chunks.embedding`
-    - [ ] GIN indexes on `document_chunks.search_vector` and metadata JSONB
-    - [ ] Row-Level Security (RLS) enabled + policies (`profiles`, `chat_threads`, `chat_messages`, `message_citations` scoped to owning `auth.uid()`; read policy on `source_documents` and `document_chunks` for authenticated users) and role grants
-  - [ ] Apply migration against hosted Supabase via direct connection: `uv run alembic upgrade head`
+  - [x] Generate initial migration with `uv run alembic revision --autogenerate -m "initial schema"`
+  - [x] Review and add explicit `op.execute()` operations for Postgres/Supabase specifics:
+    - [x] `CREATE EXTENSION IF NOT EXISTS vector;`
+    - [x] `vector(1536)` embedding column on `document_chunks`
+    - [x] Generated `tsvector` column (`search_vector`) on `document_chunks.chunk_text` with trigger update function
+    - [x] HNSW index on `document_chunks.embedding` (`vector_cosine_ops`)
+    - [x] GIN indexes on `document_chunks.search_vector` and metadata JSONB
+  - [x] Apply migration against hosted Supabase via direct connection: `uv run alembic upgrade head`
+  - [ ] Row-Level Security (RLS) enabled + policies (`users`, `chat_threads`, `chat_messages`, `message_citations` scoped to owning `auth.uid()`; read policy on `source_documents` and `document_chunks` for authenticated users) and role grants
 
 ---
 

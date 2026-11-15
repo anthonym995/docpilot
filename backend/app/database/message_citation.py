@@ -51,11 +51,12 @@ class MessageCitation(Base):
         DateTime(timezone=True), server_default=func.now(), nullable=False
     )
 
-    message: Mapped["ChatMessage"] = relationship("ChatMessage", back_populates="citations")
+    message: Mapped["ChatMessage"] = relationship(
+        "ChatMessage", back_populates="citations"
+    )
     chunk: Mapped["DocumentChunk | None"] = relationship(
         "DocumentChunk", back_populates="citations"
     )
     document: Mapped["SourceDocument"] = relationship(
         "SourceDocument", back_populates="citations"
     )
-
