@@ -58,17 +58,17 @@ Checklist to build the architecture in [docs/architecture.md](architecture.md) a
 **Goal:** End-to-end chat UI streaming from FastAPI, no real retrieval yet.
 
 ### Backend
-- [ ] Chat thread CRUD: list threads, create thread, load message history (`backend/app/database/chats.py` and `backend/app/api/chat.py`)
-- [ ] `POST /chat/stream` — accepts AI SDK message format, streams a stubbed assistant reply (`backend/app/chat/streaming.py`)
-- [ ] Persist user + assistant messages to `chat_messages` after stream completes
-- [ ] Enforce 403 when user accesses another user's thread (404 if missing)
+- [x] Chat thread CRUD: list threads, create thread, load message history (`backend/app/database/chats.py` and `backend/app/api/chat.py`)
+- [x] `POST /chat/stream` — accepts AI SDK message format, streams a stubbed assistant reply (`backend/app/chat/streaming.py`)
+- [x] Persist user + assistant messages to `chat_messages` after stream completes
+- [x] Enforce 403 when user accesses another user's thread (404 if missing)
 
 ### Frontend
-- [ ] React Router: login, chat list, chat thread routes (`/`, `/c/:threadId`)
-- [ ] AI SDK chat primitives pointed at `POST /chat/stream` with Supabase bearer token
-- [ ] Thread sidebar (past conversations)
-- [ ] Basic message list + input + streaming indicator
-- [ ] Verify: create thread, send message, see streamed stub response, reload and see history
+- [x] React Router: login, chat list, chat thread routes (`/`, `/c/:threadId`)
+- [x] AI SDK chat primitives pointed at `POST /chat/stream` with Supabase bearer token
+- [x] Thread sidebar (past conversations)
+- [x] Basic message list + input + streaming indicator
+- [x] Verify: create thread, send message, see streamed stub response, reload and see history
 
 ---
 
